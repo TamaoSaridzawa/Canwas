@@ -5,45 +5,27 @@ using UnityEngine.UI;
 
 public class HealthBar : MonoBehaviour
 {
-    [SerializeField] private Slider _slider;
+    [SerializeField] private Player _player;
 
-    private float _step = 10;
-    private float _targetValue;
+    private Slider _slider;
     private float _speed = 5f;
 
     private void Start()
     {
-        _targetValue = _slider.value;
+        _slider = GetComponent<Slider>();
     }
 
-    public void HealHealth()
+    public void ChangeHealth()
     {
-        StartCoroutine(Heal());
+        StartCoroutine(Change());
     }
 
-    public void DealDamage()
+    private IEnumerator Change()
     {
-        StartCoroutine(Damage());
-    }
-
-    private IEnumerator Heal()
-    {
-        _targetValue += _step;
-
-        while (_slider.value < _targetValue)
+        while (_slider.value != _player.Health)
         {
-            _slider.value = Mathf.MoveTowards(_slider.value, _targetValue, _speed * Time.deltaTime);
-            yield return null;
-        }
-    }
+            _slider.value = Mathf.MoveTowards(_slider.value, _player.Health, _speed * Time.deltaTime);
 
-    private IEnumerator Damage()
-    {
-        _targetValue -= _step;
-
-        while (_slider.value > _targetValue)
-        {
-            _slider.value = Mathf.MoveTowards(_slider.value, _targetValue, _speed * Time.deltaTime);
             yield return null;
         }
     }
