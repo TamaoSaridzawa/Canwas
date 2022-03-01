@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private HealthBar _healthBar;
-
     private float _health = 0;
 
     public float Health => _health;
@@ -13,12 +11,10 @@ public class Player : MonoBehaviour
     public void TakeDamage(float damage)
     {
         _health -= damage;
-        _healthBar.ChangeHealth();
     }
 
     public void Heal(float health)
     {
         _health += health;
-        _healthBar.ChangeHealth();
     }
 }
