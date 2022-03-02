@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(Slider))]
 public class HealthBar : MonoBehaviour
 {
     [SerializeField] private Player _player;
 
     private Slider _slider;
     private float _speed = 5f;
+    private Coroutine _changeJob = null;
 
     private void Start()
     {
@@ -17,7 +19,17 @@ public class HealthBar : MonoBehaviour
 
     public void ChangeHealth()
     {
-        StartCoroutine(Change());
+        if (_changeJob != null)
+        {
+            StopCoroutine(_changeJob);
+        }
+
+        StartChange();
+    }
+
+    private void StartChange()
+    {
+        _changeJob = StartCoroutine(Change());
     }
 
     private IEnumerator Change()
