@@ -12,11 +12,6 @@ public class HealthBar : MonoBehaviour
     private float _speed = 5f;
     private Coroutine _changeJob = null;
 
-    private void Start()
-    {
-        _slider = GetComponent<Slider>();
-    }
-
     public void ChangeHealth()
     {
         if (_changeJob != null)
@@ -25,6 +20,22 @@ public class HealthBar : MonoBehaviour
         }
 
         StartChange();
+    }
+
+    private void Start()
+    {
+        _slider = GetComponent<Slider>();
+        _slider.value = _player.Health;
+    }
+
+    private void OnEnable()
+    {
+        _player.ChangeHealth += ChangeHealth;
+    }
+
+    private void OnDisable()
+    {
+        _player.ChangeHealth -= ChangeHealth;
     }
 
     private void StartChange()
