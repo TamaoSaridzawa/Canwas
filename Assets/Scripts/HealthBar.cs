@@ -12,16 +12,6 @@ public class HealthBar : MonoBehaviour
     private float _speed = 5f;
     private Coroutine _changeJob = null;
 
-    public void ChangeHealth()
-    {
-        if (_changeJob != null)
-        {
-            StopCoroutine(_changeJob);
-        }
-
-        StartChange();
-    }
-
     private void Start()
     {
         _slider = GetComponent<Slider>();
@@ -30,26 +20,36 @@ public class HealthBar : MonoBehaviour
 
     private void OnEnable()
     {
-        _player.ChangeHealth += ChangeHealth;
+        _player.HealthChanged += OnChangeHealth;
     }
 
     private void OnDisable()
     {
-        _player.ChangeHealth -= ChangeHealth;
+        _player.HealthChanged -= OnChangeHealth;
     }
 
-    private void StartChange()
+    public void OnChangeHealth(float health)
     {
-        _changeJob = StartCoroutine(Change());
-    }
-
-    private IEnumerator Change()
-    {
-        while (_slider.value != _player.Health)
+        if (_changeJob != null)
         {
-            _slider.value = Mathf.MoveTowards(_slider.value, _player.Health, _speed * Time.deltaTime);
+            StopCoroutine(_changeJob);
+        }
 
-            yield return null;
+        StartChange(health);
+    }
+
+    private void StartChange(float health)
+    {
+        _changeJob = StartCoroutine(Change(health));
+    }
+
+    private IEnumerator Change(float health)
+    {
+        while (_slider.value != health)
+        {
+          _slider.value = Mathf.MoveTowards(_slider.value, health, _speed * Time.deltaTime);
+
+          yield return null;
         }
     }
 }
